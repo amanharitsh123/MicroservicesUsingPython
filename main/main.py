@@ -1,10 +1,10 @@
 import requests
 from dataclasses import dataclass
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import UniqueConstraint
-
+from producer import publish
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@db/main'
 CORS(app)
@@ -35,8 +35,25 @@ def index():
 
 @app.route('/api/products/<int:id>/like', methods=['POST'])
 def like(id):
-    req = requests.get('http://host.docker.internal:8000/api/user')
-    return jsonify(req.json())
+    req = requests.get('http://172.17.0.1:8000/api/user')
+    json = req.json()
+    print(json)
+    try:
+        productUser = ProductUser(user_id=json['id'], product_id=id)
+        db.session.add(productUser)
+        db.session.commit()
+        #event
+        try:
+            publish('product_liked', id)
+        except:
+            print("Publishing failed")
+    except:
+        abort(400, 'You have already liked this product')
+
+
+    return jsonify({
+        'message':'success'
+    })
 
 
 
