@@ -1,0 +1,43 @@
+<html>
+  <body>
+    <form method="POST" action="/products/create">
+      Title:  <input type="text" name="title"> <br>
+      Image: <input type="text" name="image"> <br>
+      <input type="submit" value="Add">
+    </form>
+    
+    <form method="POST" action="/products/delete">
+        ID:  <input type="text" name="id"> <br>
+        <input type="submit" value="Delete">
+    </form>
+
+    <form method="POST" action="/products/update">
+        ID:    <input type="text" name="id"> <br>
+        Title: <input type="text" name="title"> <br>
+        Image: <input type="text" name="image"> <br>
+        <input type="submit" value="Update">
+    </form>
+    
+    <form method="POST" action="/products/like">
+        ID:    <input type="text" name="id"> <br>
+        <input type="submit" value="Like">
+    </form>
+
+    <table>
+        <TR>
+            <TD class="c2">ID</TD>
+            <TD class="c3">TITLE</TD>
+            <TD class="c4"><SPAN>Image</SPAN></TD>
+            <TD class="c5"><SPAN>Likes</SPAN></TD>
+        </TR>
+        {% for item in items %}
+        <TR>
+        <TD class="c2">{{item.id}}</TD>
+        <TD class="c3">{{item.title}}</TD>
+        <TD class="c4"><SPAN>{{item.image}}</SPAN></TD>
+        <TD class="c5"><SPAN>{{item.likes}}</SPAN></TD>
+        </TR>
+        {% endfor %}
+    </table>
+</body>
+</html>
