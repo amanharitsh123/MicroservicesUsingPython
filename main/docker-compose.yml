@@ -12,6 +12,7 @@ services:
         depends_on:
             - db
     queue:
+        restart: always
         build:
             context: .
             dockerfile: Dockerfile
